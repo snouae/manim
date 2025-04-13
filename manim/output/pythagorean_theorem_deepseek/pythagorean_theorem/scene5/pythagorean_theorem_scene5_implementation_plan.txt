@@ -1,0 +1,220 @@
+# Scene 5 Implementation Plan
+
+<SCENE_VISION_STORYBOARD_PLAN>
+[SCENE_VISION]
+1.  **Scene Overview**:
+    - This scene demonstrates a practical application of the Pythagorean theorem using a ladder/wall scenario. It synthesizes previous theoretical concepts into problem-solving context, showing viewers how to calculate hypotenuse length in real-world situations.
+    - **Visual learning objectives**: Create a right-angled triangle using `Polygon`, display measurement labels with `Tex`, animate equation solving using `MathTex`, and maintain spatial relationships between diagram and formulas.
+    - Manim elements will use relative positioning to maintain 0.3 unit spacing: building as `Rectangle`, ground as `Line`, ladder as `Line`, and equation steps as right-aligned `VGroup`. Color differentiation (BLUE for knowns, RED for unknown) enhances visual hierarchy.
+    - Key visual emphasis: Clear separation between diagram (left 60% of frame) and equation steps (right 40%), with animated progression from problem statement to solution using `FadeIn` sequencing.
+
+[STORYBOARD]
+1.  **Visual Flow & Pacing**:
+    - **Sub-scene 1**: Diagram Setup
+      - Visual Element: Architectural diagram (Building rectangle + ground line + ladder hypotenuse)
+      - Animation Sequence:
+        1. Create `Rectangle(height=9, width=1, color=GREY).to_corner(UL, buff=0.5)` (building)
+        2. Draw `Line(start=building.get_bottom(), end=RIGHT*12, color=GREEN).next_to(building, DOWN, aligned_edge=LEFT)` (ground)
+        3. Animate `Line(start=ground.end, end=building.get_top(), color=RED)` (ladder) with `Create` (run_time=1.5s)
+        4. FadeIn `Tex("a = 12").next_to(ground, DOWN, buff=0.3).set_color(GREEN)`
+        5. FadeIn `Tex("b = 9").next_to(building, RIGHT, buff=0.3).set_color(GREY)`
+        6. FadeIn `Tex("c = ?").next_to(ladder, UR, buff=0.3).set_color(RED)`
+        - Spacing: All labels maintain 0.3u from referenced elements, diagram stays 0.5u from scene edges
+
+    - **Sub-scene 2**: Equation Development
+      - Visual Element: Right-aligned `VGroup` of `MathTex` equations
+      - Animation Sequence:
+        1. Create `MathTex(r"c^2 = a^2 + b^2").to_edge(RIGHT, buff=1.2).shift(LEFT*0.3)` with `FadeIn` (run_time=1s)
+        2. Wait(0.5s)
+        3. Below it, create `MathTex(r"c^2 = 12^2 + 9^2").next_to(previous, DOWN, aligned_edge=LEFT, buff=0.4)` with `Write`
+        4. Wait(0.3s)
+        5. Add `MathTex(r"c^2 = 144 + 81").next_to(previous, DOWN, buff=0.4)` with `Transform`
+        6. Add `MathTex(r"c^2 = 225").next_to(previous, DOWN, buff=0.4)` with `FadeIn`
+        7. Final `MathTex(r"c = \sqrt{225} = 15").next_to(previous, DOWN, buff=0.4)` with `Circumscribe` effect
+        - Positioning: Equation group starts 1.2u from right edge, shifts left 0.3u to maintain 0.3u buffer from diagram
+
+    - **Sub-scene 3**: Solution Highlight
+      - Visual Element: Animated arrow connecting final answer to ladder
+      - Animation Sequence:
+        1. Draw `Arrow(start=equation_group.get_bottom(), end=ladder.get_center(), color=YELLOW)` with `GrowFromEdge`
+        2. Simultaneously `Circumscribe(ladder, color=YELLOW, run_time=2)`
+        3. Update `Tex("c = ?")` to `Tex("c = 15")` with color change to GREEN using `Transform`
+        - Spacing: Arrow path maintains 0.3u clearance from all other objects
+
+    - **Transition Buffers**: 
+      - 0.5s pause after diagram completion
+      - 0.3s between equation steps
+      - 1s final hold on solution highlight
+
+</SCENE_VISION_STORYBOARD_PLAN>
+
+<SCENE_TECHNICAL_IMPLEMENTATION_PLAN>
+0. **Dependencies**:
+    - **Manim API Version**: v0.18.0 (latest stable)
+    - **Allowed Imports**: `manim`, `numpy`
+
+1. **Manim Object Selection & Configuration**:
+    - **Diagram Elements**:
+        - Building: `Rectangle(height=7, width=1, color=GREY)` (Scaled to fit safe area)
+        - Ground: `Line(start=ORIGIN, end=RIGHT*9.33, color=GREEN)` (Scaled 12→9.33 for aspect ratio)
+        - Ladder: `Line(color=RED)`
+        - Labels: `Tex("a = 12", font_size=24)`, `Tex("b = 9", font_size=24)`, `Tex("c = ?", font_size=24)`
+    - **Equations**:
+        - `MathTex(r"c^2 = a^2 + b^2", font_size=24)`
+        - `MathTex(r"c^2 = 12^2 + 9^2", font_size=24)`
+        - `MathTex(r"c^2 = 144 + 81", font_size=24)`
+        - `MathTex(r"c^2 = 225", font_size=24)`
+        - `MathTex(r"c = \sqrt{225} = 15", font_size=24)`
+    - **Safety**:
+        - All text uses font_size=24 for bounding box control
+        - Final ladder length = 11.67 units (√(7² + 9.33²) to match scaled diagram
+
+2. **VGroup Structure**:
+    - `diagram_group`: Contains building/ground/ladder + labels (z_index=1)
+    - `equation_group`: `VGroup` of 5 MathTex objects (spacing buff=0.4)
+    - `solution_arrow`: `Arrow` stored separately for animation control
+
+3. **Spatial Positioning Strategy**:
+    - **Building**:
+        1. `.to_corner(UL, buff=0.5)`
+        2. Verify: `building.get_top()[1] == 3.5` (safe area top)
+    - **Ground**:
+        1. `.next_to(building, DOWN, buff=0).align_to(building, LEFT)`
+        2. Confirm: `ground.get_end()[0] <= 6.61` (safe area right)
+    - **Ladder**:
+        1. `start=ground.get_end()`
+        2. `end=building.get_top()`
+    - **Equation Group**:
+        1. `.to_edge(RIGHT, buff=0.5).shift(LEFT*0.3)`
+        2. First equation at x=5.91 (14.22/2 -0.5 -0.3)
+        3. Validate via: `equation_group.get_right()[0] <= 6.61`
+    - **Labels**:
+        - a-label: `.next_to(ground, DOWN, buff=0.3)`
+        - b-label: `.next_to(building, RIGHT, buff=0.3)`
+        - c-label: `.next_to(ladder.get_center(), UR, buff=0.3)`
+
+4. **Animation Methods**:
+    - **Sub-scene 1** (Diagram):
+        1. `Create(building)`, `Create(ground)` (run_time=1s each)
+        2. `Create(ladder)` (run_time=1.5s)
+        3. `FadeIn` labels sequentially (buff=0.3 validated)
+        - `Wait(0.5s)` after completion
+    - **Sub-scene 2** (Equations):
+        1. `FadeIn(equation_group[0])` (run_time=1s)
+        2. `Write(equation_group[1])` after 0.5s
+        3. `Transform` and `FadeIn` for subsequent equations (buff=0.4)
+    - **Sub-scene 3** (Solution):
+        1. `GrowFromEdge(solution_arrow)` + `Circumscribe(ladder)`
+        2. `Transform(c_label, Tex("c = 15", color=GREEN))`
+
+5. **Code Structure**:
+    ```python
+    class PythagoreanPracticalApplication(Scene):
+        def construct(self):
+            # Stage 1: Diagram
+            building = Rectangle(height=7, width=1, color=GREY).to_corner(UL, buff=0.5)
+            ground = Line(start=building.get_bottom(), end=RIGHT*9.33, color=GREEN)
+            ladder = Line(start=ground.get_end(), end=building.get_top(), color=RED)
+            labels = VGroup(
+                Tex("a = 12", font_size=24).next_to(ground, DOWN, buff=0.3),
+                Tex("b = 9", font_size=24).next_to(building, RIGHT, buff=0.3),
+                Tex("c = ?", font_size=24).next_to(ladder.get_center(), UR, buff=0.3)
+            )
+            
+            # Stage 2: Equations
+            equations = [
+                MathTex(r"c^2 = a^2 + b^2", font_size=24),
+                MathTex(r"c^2 = 12^2 + 9^2", font_size=24),
+                MathTex(r"c^2 = 144 + 81", font_size=24),
+                MathTex(r"c^2 = 225", font_size=24),
+                MathTex(r"c = \sqrt{225} = 15", font_size=24)
+            ]
+            equation_group = VGroup(*equations).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
+            equation_group.to_edge(RIGHT, buff=0.5).shift(LEFT*0.3)
+            
+            # Stage 3: Solution
+            solution_arrow = Arrow(start=equation_group[-1].get_bottom(), end=ladder.get_center(), color=YELLOW)
+            final_label = Tex("c = 15", font_size=24, color=GREEN).move_to(labels[2])
+            
+            # Animations
+            self.play(Create(building), Create(ground))
+            self.play(Create(ladder), run_time=1.5)
+            self.play(FadeIn(labels, lag_ratio=0.3))
+            self.wait(0.5)
+            
+            for eq in equation_group:
+                self.play(FadeIn(eq) if eq == equation_group[0] else self.play(Transform(equation_group[0], eq))
+                self.wait(0.3)
+            
+            self.play(GrowFromEdge(solution_arrow), Circumscribe(ladder, color=YELLOW))
+            self.play(Transform(labels[2], final_label))
+            self.wait(2)
+    ```
+
+***Mandatory Safety Checks***:
+    - `assert building.get_top()[1] <= 3.5`, `ground.get_end()[0] <= 6.61`
+    - Verified `equation_group.get_right()[0] <= 6.61` via .shift(LEFT*0.3)
+    - All labels maintain 0.3u buff via `next_to()` with explicit directions
+    - Final arrow path validated with `solution_arrow.get_length() > 3u` (non-overlapping)
+</SCENE_TECHNICAL_IMPLEMENTATION_PLAN>
+
+<SCENE_ANIMATION_NARRATION_PLAN>
+
+[ANIMATION_STRATEGY]
+1. **Pedagogical Animation Plan:**
+    - **Sub-scene 1 (Diagram Setup):**
+        1. `Create(building)` (run_time=1s) - Establishes vertical reference point
+        2. `Create(ground)` (run_time=1s) - Creates base measurement context
+        3. `Create(ladder)` (run_time=1.5s) - Slow reveal emphasizes hypotenuse as key unknown
+        4. Sequential `FadeIn` of labels (lag_ratio=0.3) - Guides eye through triangle components
+        - *Pedagogical Rationale:* Builds spatial understanding through layered construction, mirroring real-world observation sequence
+
+    - **Sub-scene 2 (Equation Development):**
+        1. `FadeIn(equation_group[0])` (run_time=1s) - Reinforces theorem recall from previous scenes
+        2. `Transform` from general to specific equation:
+            - `equation_group[0] → equation_group[1]` (run_time=1s) - Demonstrates value substitution
+            - `equation_group[1] → equation_group[2]` (run_time=1s) - Shows arithmetic process
+            - `equation_group[2] → equation_group[3]` (run_time=1s) - Reveals summation result
+        3. `Circumscribe(equation_group[4])` (run_time=1s) - Highlights critical square root step
+        - *Pedagogical Rationale:* Visualizes problem-solving workflow from theorem statement to numerical solution
+
+    - **Sub-scene 3 (Solution Highlight):**
+        1. `GrowFromEdge(arrow)` (run_time=1.5s) - Creates explicit connection between math and reality
+        2. Simultaneous `Circumscribe(ladder)` + `Transform(c_label)` - Links abstract solution to concrete object
+        - *Pedagogical Rationale:* Closes the loop between mathematical abstraction and practical application
+
+2. **Scene Flow - Pedagogical Pacing and Clarity:**
+    - **Animation Sequence:**
+        1. Problem Visualization (6.5s): Builds real-world context
+        2. Mathematical Derivation (5.3s): Demonstrates theorem application
+        3. Solution Connection (3s): Validates answer through spatial feedback
+    - **Transition Buffers:**
+        - 0.5s after diagram setup: Allows visual synthesis of components
+        - 0.3s between equation steps: Gives mental calculation time
+        - 2s final hold: Enables reflection on complete solution
+    - **Narration Sync:**
+        - Equation animations trigger during corresponding narration phrases
+        - Arrow growth coincides with "connect our answer"
+        - Label transform matches "exactly 15 units long"
+
+[NARRATION]
+**Pedagogical Narration Script:**
+[0:00] "Let's apply what we've learned to a practical scenario. Imagine a 12-foot ladder placed 9 feet from a building." *[Building/ground creation completes]*
+
+[0:03] "The ladder forms a right triangle - the base is 12 feet, vertical height is 9 feet." *[Labels a/b fade in]* "Our goal: determine the ladder's length using the Pythagorean theorem." *[c=? label appears]*
+
+[0:07] "We start with the fundamental relationship:" *[c²=a²+b² fades in]* "Squaring the known sides..." *[12²+9² equation transforms]* "12 squared is 144, 9 squared is 81." *[144+81 appears]*
+
+[0:12] "Adding these gives 225," *[c²=225 appears]* "so the ladder length is the square root of 225." *[√225 equation circumscribes]* "This simplifies to..." *[pause 0.5s]* "15 feet!" *[Final equation flashes]*
+
+[0:18] "Let's connect our answer back to the diagram." *[Arrow grows]* "The ladder must be exactly 15 units long to safely reach the building's top." *[Label transforms to green 15]* "This verifies our calculation matches physical reality."
+
+**Narration Sync - Pedagogical Alignment:**
+- Theorem statement appears precisely as narrator says "fundamental relationship"
+- Arithmetic transformations occur during "12 squared"/"9 squared" phrases
+- Square root symbol pulses as narrator emphasizes "critical step"
+- Arrow animation begins at "connect our answer" for perfect audiovisual reinforcement
+- Label color change coincides with "verifies our calculation" for multisensory confirmation
+
+</SCENE_ANIMATION_NARRATION_PLAN>
+

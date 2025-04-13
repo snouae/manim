@@ -1,0 +1,59 @@
+<SCENE_ANIMATION_NARRATION_PLAN>
+
+[ANIMATION_STRATEGY]
+1. **Pedagogical Animation Plan:**
+    - **Sub-scene 1 (Diagram Setup):**
+        1. `Create(building)` (run_time=1s) - Establishes vertical reference point
+        2. `Create(ground)` (run_time=1s) - Creates base measurement context
+        3. `Create(ladder)` (run_time=1.5s) - Slow reveal emphasizes hypotenuse as key unknown
+        4. Sequential `FadeIn` of labels (lag_ratio=0.3) - Guides eye through triangle components
+        - *Pedagogical Rationale:* Builds spatial understanding through layered construction, mirroring real-world observation sequence
+
+    - **Sub-scene 2 (Equation Development):**
+        1. `FadeIn(equation_group[0])` (run_time=1s) - Reinforces theorem recall from previous scenes
+        2. `Transform` from general to specific equation:
+            - `equation_group[0] → equation_group[1]` (run_time=1s) - Demonstrates value substitution
+            - `equation_group[1] → equation_group[2]` (run_time=1s) - Shows arithmetic process
+            - `equation_group[2] → equation_group[3]` (run_time=1s) - Reveals summation result
+        3. `Circumscribe(equation_group[4])` (run_time=1s) - Highlights critical square root step
+        - *Pedagogical Rationale:* Visualizes problem-solving workflow from theorem statement to numerical solution
+
+    - **Sub-scene 3 (Solution Highlight):**
+        1. `GrowFromEdge(arrow)` (run_time=1.5s) - Creates explicit connection between math and reality
+        2. Simultaneous `Circumscribe(ladder)` + `Transform(c_label)` - Links abstract solution to concrete object
+        - *Pedagogical Rationale:* Closes the loop between mathematical abstraction and practical application
+
+2. **Scene Flow - Pedagogical Pacing and Clarity:**
+    - **Animation Sequence:**
+        1. Problem Visualization (6.5s): Builds real-world context
+        2. Mathematical Derivation (5.3s): Demonstrates theorem application
+        3. Solution Connection (3s): Validates answer through spatial feedback
+    - **Transition Buffers:**
+        - 0.5s after diagram setup: Allows visual synthesis of components
+        - 0.3s between equation steps: Gives mental calculation time
+        - 2s final hold: Enables reflection on complete solution
+    - **Narration Sync:**
+        - Equation animations trigger during corresponding narration phrases
+        - Arrow growth coincides with "connect our answer"
+        - Label transform matches "exactly 15 units long"
+
+[NARRATION]
+**Pedagogical Narration Script:**
+[0:00] "Let's apply what we've learned to a practical scenario. Imagine a 12-foot ladder placed 9 feet from a building." *[Building/ground creation completes]*
+
+[0:03] "The ladder forms a right triangle - the base is 12 feet, vertical height is 9 feet." *[Labels a/b fade in]* "Our goal: determine the ladder's length using the Pythagorean theorem." *[c=? label appears]*
+
+[0:07] "We start with the fundamental relationship:" *[c²=a²+b² fades in]* "Squaring the known sides..." *[12²+9² equation transforms]* "12 squared is 144, 9 squared is 81." *[144+81 appears]*
+
+[0:12] "Adding these gives 225," *[c²=225 appears]* "so the ladder length is the square root of 225." *[√225 equation circumscribes]* "This simplifies to..." *[pause 0.5s]* "15 feet!" *[Final equation flashes]*
+
+[0:18] "Let's connect our answer back to the diagram." *[Arrow grows]* "The ladder must be exactly 15 units long to safely reach the building's top." *[Label transforms to green 15]* "This verifies our calculation matches physical reality."
+
+**Narration Sync - Pedagogical Alignment:**
+- Theorem statement appears precisely as narrator says "fundamental relationship"
+- Arithmetic transformations occur during "12 squared"/"9 squared" phrases
+- Square root symbol pulses as narrator emphasizes "critical step"
+- Arrow animation begins at "connect our answer" for perfect audiovisual reinforcement
+- Label color change coincides with "verifies our calculation" for multisensory confirmation
+
+</SCENE_ANIMATION_NARRATION_PLAN>

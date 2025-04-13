@@ -1,0 +1,71 @@
+<SCENE_ANIMATION_NARRATION_PLAN>
+
+[ANIMATION_STRATEGY]
+1. **Pedagogical Animation Plan:**
+    - **Sub-scene 1: Base Triangle & Square Construction (Run Time: 3.5s)**
+        1. `FadeIn(triangle)` (1s) - Reintroduces Scene 1's triangle using familiar visual context
+        2. Sequential `Create()` for squares (3x1s with 0.2 lag):
+           - Blue square LEFT: Establishes 'a' side relationship
+           - Red square DOWN: Creates spatial contrast with 'b' side
+           - Gold square UR: Positions hypotenuse square diagonally for visual separation
+    
+    - **Sub-scene 2: Area Labeling (Run Time: 2.5s)**
+        1. Simultaneous `Write()` of area labels (1.5s):
+           - White text ensures visibility against colored squares
+           - Centered positioning reinforces area concept
+        2. 0.5s pause for visual absorption
+    
+    - **Sub-scene 3: Highlighting Leg Squares (Run Time: 3s)**
+        1. Dual `Circumscribe()` animations (1.5s):
+           - Blue/red flashes create association between legs and their squares
+        2. `Write(sum_tex)` UP (1s):
+           - Positions equation in negative space above triangle
+           - White text maintains focus on mathematical relationship
+    
+    - **Sub-scene 4: Visual Merging (Run Time: 4s)**
+        1. `VGroup` transformation (2s):
+           - Leg squares scale/move to hypotenuse position
+           - 50% scaling demonstrates area equivalence through spatial adjustment
+        2. Equation `Transform()` (1.5s):
+           - Morphs sum into c² for algebraic continuity
+        3. `Flash()` (0.5s):
+           - Gold emphasis confirms hypotenuse as solution space
+
+2. **Scene Flow - Pedagogical Pacing and Clarity:**
+    - **Animation Sequence:**
+        1. Foundation (3.5s): Build geometric context
+        2. Quantification (2.5s): Add algebraic meaning
+        3. Hypothesis (3s): Suggest additive relationship
+        4. Proof (4s): Demonstrate equivalence
+    
+    - **Transition Buffers:**
+        1. 0.5s after square creation: Let viewers process spatial relationships
+        2. 0.5s after labels: Allow formula recognition
+        3. 0.5s before merging: Create anticipation
+    
+    - **Narration Sync:**
+        - Critical animation starts (square creation, label writes) begin 0.2s after narration cue
+        - Equation reveals sync with verbal "sum" statement
+        - Flash coincides with "exactly matches" vocal emphasis
+
+[NARRATION]
+- **Pedagogical Narration Script:**
+    "[0.0s] Building on our right-angled triangle from before, let's explore its hidden geometric relationship. *[FadeIn triangle]*  
+    
+    [1.2s] If we construct squares on each side... *[Square_a appears]* ...here on side 'a'... *[Square_b appears]* ...and here on side 'b'... *[Square_c appears]* ...and finally on the hypotenuse 'c'.  
+    
+    [4.5s] Each square's area is exactly the square of its side length. *[Labels write]* So we have a², b², and c².  
+    
+    [7.0s] Now, watch carefully - *[Circumscribe animations]* the areas of the smaller squares... *[Equation appears]* ...when combined through addition...  
+    
+    [9.5s] Can they relate to the hypotenuse square? *[VGroup movement starts]* Let's test this visually.  
+    
+    [11.0s] Remarkably, *[Transformation completes]* the combined areas of a² and b²... *[Flash]* ...fit perfectly into the c² space! This geometric truth is exactly what the Pythagorean theorem expresses."
+
+- **Narration Sync - Pedagogical Alignment:**
+    - Formula mentions timed with label appearances (Δ±0.1s)
+    - "Combined through addition" syncs with equation write
+    - Rhetorical question ("Can they relate?") during transformation anticipation pause
+    - "Fit perfectly" coincides with flash for audiovisual reinforcement
+
+</SCENE_ANIMATION_NARRATION_PLAN>

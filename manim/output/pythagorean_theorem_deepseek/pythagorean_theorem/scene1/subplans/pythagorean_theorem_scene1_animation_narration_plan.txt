@@ -1,0 +1,80 @@
+<SCENE_ANIMATION_NARRATION_PLAN>
+
+[ANIMATION_STRATEGY]
+1. **Pedagogical Animation Plan:**
+    - **VGroup Transitions:**
+        1. `triangle_group` (VGroup containing triangle + angle marker)
+           - Transition: `FadeIn` over 2s during triangle construction
+           - Rationale: Gradual reveal establishes spatial reference point for all subsequent elements
+        2. `label_group` (VGroup of side labels)
+           - Transition: `LaggedStart` with 0.3s interval between label appearances
+           - Rationale: Progressive labeling prevents cognitive overload while emphasizing side relationships
+        3. `terminology_group` (Legs/Hypotenuse text)
+           - Transition: `AnimationGroup` with simultaneous FlashAround and FadeIn
+           - Rationale: Links visual labels to mathematical terminology through coordinated emphasis
+
+    - **Element Animations:**
+        - **Triangle Construction (Sub-scene 1):**
+            1. `Create(triangle)` over 2s (Gold stroke)
+               - Pedagogical Purpose: Establishes core geometric shape as visual foundation
+            2. `FadeIn(angle_marker)` over 0.5s
+               - Pedagogical Purpose: Highlights defining characteristic of right-angled triangles
+
+        - **Side Labeling (Sub-scene 2):**
+            1. Sequential `FadeIn` of labels a(0.5s) → b(0.5s) → c(0.75s)
+               - Pedagogical Purpose: Reinforces side identification sequence (legs → hypotenuse)
+            2. Label c rotation (-33.69°)
+               - Pedagogical Purpose: Matches hypotenuse slope for spatial accuracy
+
+        - **Angle Clarification (Sub-scene 3):**
+            1. `Circumscribe(angle_marker)` over 1.5s (Gold highlight)
+               - Pedagogical Purpose: Reinforces 90° concept through visual emphasis
+            2. Simultaneous `Write(angle_label)` and `Create(arrow)` over 1s
+               - Pedagogical Purpose: Connects symbolic notation (90°) to geometric feature
+
+        - **Terminology Reveal (Sub-scene 4):**
+            1. `FlashAround(legs_labels)` over 0.8s (Blue emphasis)
+               - Pedagogical Purpose: Groups related elements for conceptual understanding
+            2. Coordinated `FadeIn` of "Legs" text and curved arrow over 1s
+               - Pedagogical Purpose: Establishes relationship between symbols and terminology
+            3. `FadeIn("Hypotenuse")` with red emphasis over 1s
+               - Pedagogical Purpose: Contrasts special status of hypotenuse through color coding
+
+2. **Scene Flow - Pedagogical Pacing:**
+    - **Animation Sequence:**
+        1. Foundation Phase (3.5s): Triangle + angle marker establishment
+        2. Labeling Phase (2.75s): Gradual side identification
+        3. Conceptual Phase (3.5s): Angle explanation and terminology
+        4. Synthesis Phase (4s): Final terminology integration
+
+    - **Transition Buffers:**
+        1. 0.5s after triangle creation
+           - Purpose: Allows initial shape recognition before introducing labels
+        2. 1s after side labeling
+           - Purpose: Creates pause before introducing angle measurement concept
+        3. 2s final buffer
+           - Purpose: Enables retention of key terms before scene transition
+
+    - **Narration Sync Strategy:**
+        - Critical animation-narration pairs:
+            1. "This special angle..." syncs with angle marker circumscription
+            2. "We call these sides..." matches FlashAround legs labels
+            3. "The hypotenuse..." coincides with red text fade-in
+        - 300ms audio lead before visual emphasis for natural attention guidance
+
+[NARRATION]
+**Pedagogical Narration Script:**
+[00:00] "At the heart of the Pythagorean theorem lies a fundamental shape - the right-angled triangle. [Triangle creation begins] Let's construct one with two perpendicular sides meeting at a 90-degree angle. [Angle marker fades in] This special angle is what defines all right-angled triangles and determines their unique properties."
+
+[00:02.5] "Every right-angled triangle has three key components. [Label a fades in] We call the two shorter sides that form the right angle the 'legs' - let's label them 'a' and 'b'. [Label b fades in] The third side, [Label c rotates into place] which always sits opposite the right angle, has a special name - can you guess what it might be?"
+
+[00:05] "That's right - we call this longest side the hypotenuse, labeled 'c'. [Red hypotenuse label emphasis] Remember this distinction: legs create the right angle, while the hypotenuse always opposes it. [Curved arrow appears] This relationship remains constant in every right-angled triangle you'll encounter."
+
+[00:07.5] "Let's solidify these terms. [Flash around legs] The 'legs' (a and b) form the foundation of the triangle, [Legs text appears] while the 'hypotenuse' (c) [Hypotenuse text appears] acts as the connecting bridge between them. In our next exploration, we'll discover how these three sides relate mathematically through the Pythagorean theorem."
+
+**Narration Sync - Pedagogical Alignment:**
+- **Precision Timing:** Angle marker narration ("90-degree angle") begins 0.3s before marker fade-in completion, using human speech anticipation to focus attention
+- **Concept Reinforcement:** "Longest side" vocal emphasis coincides with label c's rotation completion, leveraging visual-spatial learning
+- **Terminal Pause:** Final 2s silence after "Pythagorean theorem" mention creates deliberate space for concept integration before scene transition
+
+</SCENE_ANIMATION_NARRATION_PLAN>

@@ -1,0 +1,58 @@
+<SCENE_VISION_STORYBOARD_PLAN>
+[SCENE_VISION]
+1.  **Scene Overview**:
+    - This scene visually demonstrates the Pythagorean theorem by constructing squares on each side of a right-angled triangle, showing their area relationships. It builds on Scene 1's triangle to create geometric intuition for a² + b² = c².
+    - **Visual learning objectives**: Use `Polygon` for the triangle, `Square`/`Rectangle` for side squares, `MathTex` labels for areas, and `VGroup` for grouped animations. Emphasize spatial relationships between geometric shapes and their algebraic representations.
+    - Manim visuals will use color-coded squares with synchronized animations to show how smaller areas combine. `Transform` animations will merge squares visually. `VGroup` ensures proper spacing and collective animations.
+    - Key concepts: Geometric interpretation of algebraic terms, conservation of area. Use color hierarchy (BLUE/RED for legs, GOLD for hypotenuse) and spatial isolation of squares to direct attention.
+
+[STORYBOARD]
+1.  **Visual Flow & Pacing**:
+    - Sub-scene 1: Base Triangle & Square Construction
+      - Visual Element: Right-angled `Polygon` (Scene 1's triangle) at ORIGIN
+      - Animation Sequence:
+        1. `FadeIn` triangle (preserved from Scene 1)
+        2. Create `Square` on side 'a' (LEFT): 
+           - `square_a = Square(side_length=1).next_to(triangle, LEFT, buff=0.3)`
+           - `Create(square_a, color=BLUE, run_time=1)`
+        3. Create `Square` on side 'b' (DOWN): 
+           - `square_b = Square(side_length=1.5).next_to(triangle, DOWN, buff=0.3)`
+           - `Create(square_b, color=RED, run_time=1)`
+        4. Create `Square` on hypotenuse 'c' (UR): 
+           - `square_c = Square(side_length=sqrt(3.25)).next_to(triangle, UR, buff=0.3)`
+           - `Create(square_c, color=GOLD, run_time=1)`
+        - Spacing: All squares maintain 0.3u buffer from triangle edges
+
+    - Sub-scene 2: Area Labeling
+      - Visual Element: `MathTex` labels centered in squares
+      - Animation Sequence:
+        1. Add `a² = MathTex("a^2").move_to(square_a.get_center())`
+           - `Write(a², color=WHITE)`
+        2. Add `b² = MathTex("b^2").move_to(square_b.get_center())`
+           - `Write(b², color=WHITE)`
+        3. Add `c² = MathTex("c^2").move_to(square_c.get_center())`
+           - `Write(c², color=WHITE)`
+        - Spacing: Labels centered within squares (no overlap)
+
+    - Sub-scene 3: Highlighting Leg Squares
+      - Visual Element: Color emphasis and equation setup
+      - Animation Sequence:
+        1. `Circumscribe(square_a, color=BLUE, run_time=1)`
+        2. `Circumscribe(square_b, color=RED, run_time=1)`
+        3. Create equation: `sum_tex = MathTex("a^2 + b^2").next_to(triangle, UP, buff=0.5)`
+           - `Write(sum_tex, color=WHITE)`
+        - Spacing: Equation 0.5u above triangle (safe area compliant)
+
+    - Sub-scene 4: Visual Merging
+      - Visual Element: `VGroup` transformation
+      - Animation Sequence:
+        1. Group leg squares: `leg_group = VGroup(square_a, square_b)`
+        2. Animate `leg_group.animate(run_time=2).move_to(square_c.get_center()).scale(0.5)`
+        3. `Transform(sum_tex, c².copy().move_to(sum_tex), run_time=1.5)`
+        4. Final `Flash(square_c, color=GOLD, run_time=1)`
+        - Spacing: Transformed group remains within square_c's bounds
+
+    - Transitions: 
+      - `Wait(0.5)` between sub-scenes
+      - All objects maintain 0.3u spacing from scene edges (safe area)
+</SCENE_VISION_STORYBOARD_PLAN>

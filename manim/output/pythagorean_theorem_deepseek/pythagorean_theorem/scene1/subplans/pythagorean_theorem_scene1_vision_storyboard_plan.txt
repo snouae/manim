@@ -1,0 +1,54 @@
+<SCENE_VISION_STORYBOARD_PLAN>
+[SCENE_VISION]
+1.  **Scene Overview**:
+    - Establishes foundational understanding of right-angled triangles through geometric visualization. Serves as the critical visual reference point for all subsequent theorem explanations.
+    - **Visual learning objectives**: Use `Polygon` for triangle construction, `Tex` labels for side identification, and `RightAngle` marker for angle visualization. Maintain spatial hierarchy through relative positioning and animation sequencing.
+    - Manim visuals use `VGroup` to maintain label/triangle relationships, `FadeIn` animations for progressive revelation, and color coding (BLUE/RED) to distinguish legs from hypotenuse. Strict adherence to 0.5-unit margins enforced through `.scale(0.6).move_to(ORIGIN)` positioning.
+    - Key concepts emphasized: Right angle visualization (gold square marker), hypotenuse as longest side (RED label), and spatial relationship between legs/hypotenuse through label placement buffers.
+
+[STORYBOARD]
+1.  **Visual Flow & Pacing**:
+    - **Sub-scene 1**: Triangle Construction
+        - **Visual Element**: Right-angled `Polygon` (vertices at ORIGIN, RIGHT*3, UP*2)
+        - Animation Sequence:
+            1. `Create(triangle)` with `run_time=2` (gold stroke, stroke_width=4)
+            2. Add `RightAngle` marker (size=0.4) at ORIGIN using `FadeIn` (gold fill)
+            3. `Wait(0.5)` buffer
+    - **Sub-scene 2**: Side Labeling
+        - **Visual Element**: `Tex` labels "a", "b", "c" (BLUE, BLUE, RED)
+        - Animation Sequence:
+            1. Label "a" (BLUE): `.next_to(triangle.get_left_side(), LEFT, buff=0.3)`, `FadeIn`
+            2. Label "b" (BLUE): `.next_to(triangle.get_bottom_side(), DOWN, buff=0.3)`, `FadeIn`
+            3. Label "c" (RED): `.next_to(triangle.hypotenuse, UP, buff=0.3).rotate(angle=-33.69°)` (matches slope), `FadeIn`
+            4. `Wait(1)` for absorption
+    - **Sub-scene 3**: Angle Clarification
+        - **Visual Element**: `MathTex(r"90^\circ")` (gold) with `Arrow`
+        - Animation Sequence:
+            1. `Circumscribe(right_angle_marker)` (gold, `run_time=1.5`)
+            2. `MathTex` label `.next_to(right_angle_marker, UR, buff=0.3)`, `Write`
+            3. Curved `Arrow` from label to angle marker (`tip_length=0.2`, `color=GOLD`) with `ShowCreation`
+            4. `Wait(1)` pause
+    - **Sub-scene 4**: Terminology Reveal
+        - **Visual Element**: `Tex` labels "Legs", "Hypotenuse" (positioned via VGroup)
+        - Animation Sequence:
+            1. Group legs labels (a,b) into `VGroup`. `FlashAround(legs_vgroup, color=BLUE)`
+            2. `Tex(r"\text{Legs}")`.next_to(triangle, LEFT, buff=1.2), `FadeIn` (BLUE)
+            3. `CurvedArrow` from "c" label to hypotenuse `.add_tip()`, `ShowCreation`
+            4. `Tex(r"\text{Hypotenuse}")`.next_to(triangle, RIGHT, buff=1.2), `FadeIn` (RED)
+            5. Final `Wait(2)` for retention
+
+**Positioning Enforcement**:
+- Triangle scaled to 60% vertical space: `.scale(0.6).move_to(ORIGIN)`
+- All labels maintain 0.3u buffer from geometric elements
+- Terminology text positioned 1.2u from triangle edges to respect safe margins
+- Angle marker placed with 0u buffer (integral to triangle) but 0.3u from 90° label
+
+**Style Specs**:
+- Triangle: `stroke_color=GOLD`, `stroke_width=4`
+- Labels: `font_size=36` (side), `28` (terminology)
+- Arrows: `stroke_width=3`, `tip_length=0.15`
+
+**Common Mistake Prevention**:
+- Using `Polygon` instead of `Triangle` for proper right-angle proportions
+- Label rotation matched to hypotenuse slope via `arctan(2/3) ≈ 33.69°`
+</SCENE_VISION_STORYBOARD_PLAN>

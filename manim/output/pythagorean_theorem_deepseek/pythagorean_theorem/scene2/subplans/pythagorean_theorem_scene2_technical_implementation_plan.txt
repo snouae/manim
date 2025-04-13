@@ -1,0 +1,125 @@
+<SCENE_TECHNICAL_IMPLEMENTATION_PLAN>
+0. **Dependencies**:
+    - **Manim API Version**: v0.18.0 (stable)
+    - **Allowed Imports**: `manim`, `numpy as np`
+
+1. **Manim Object Selection & Configuration**:
+    - **Triangle**: 
+        ```python
+        triangle = Polygon(
+            ORIGIN, RIGHT*1.5, UP*1, 
+            color=WHITE
+        ).move_to(ORIGIN)
+        ```
+    - **Squares**:
+        ```python
+        square_a = Square(side_length=1, color=BLUE)
+        square_b = Square(side_length=1.5, color=RED)
+        square_c = Square(side_length=np.sqrt(3.25), color=GOLD)
+        ```
+    - **Labels** (Font size 24, white):
+        ```python
+        a_sq = MathTex("a^2", font_size=24, color=WHITE)
+        b_sq = MathTex("b^2", font_size=24, color=WHITE)
+        c_sq = MathTex("c^2", font_size=24, color=WHITE)
+        ```
+    - **Equation**:
+        ```python
+        sum_tex = MathTex("a^2 + b^2", font_size=28, color=WHITE)
+        ```
+
+2. **VGroup Structure**:
+    ```python
+    leg_group = VGroup(square_a, square_b)  # For collective animations
+    label_group = VGroup(a_sq, b_sq, c_sq)  # Area labels
+    ```
+
+3. **Spatial Positioning Strategy**:
+    - **Triangle Centering**:
+        ```python
+        triangle.move_to(ORIGIN).shift(DOWN*0.15)  # Compensate for label space
+        ```
+    - **Square Positioning**:
+        ```python
+        square_a.next_to(triangle, LEFT, buff=0.3)
+        square_b.next_to(triangle, DOWN, buff=0.3)
+        square_c.next_to(triangle, UR, buff=0.3)
+        ```
+    - **Label Positioning**:
+        ```python
+        a_sq.move_to(square_a.get_center())
+        b_sq.move_to(square_b.get_center())
+        c_sq.move_to(square_c.get_center())
+        ```
+    - **Equation Positioning**:
+        ```python
+        sum_tex.next_to(triangle, UP, buff=0.5)
+        ```
+    - **Safety Checks**:
+        - Verify all objects with `get_corner(DR)`/`get_corner(UL)` stay within 0.5u margins
+        - Use `get_coord=1.3` checks for text bounding boxes
+
+4. **Animation Sequence**:
+    ```python
+    # Sub-scene 1
+    self.play(FadeIn(triangle))
+    self.play(
+        Create(square_a), 
+        Create(square_b), 
+        Create(square_c),
+        lag_ratio=0.2
+    )
+    self.wait(0.5)
+    
+    # Sub-scene 2
+    self.play(
+        Write(a_sq), 
+        Write(b_sq), 
+        Write(c_sq),
+        run_time=1.5
+    )
+    self.wait(0.5)
+    
+    # Sub-scene 3
+    self.play(
+        Circumscribe(square_a),
+        Circumscribe(square_b),
+        run_time=1.5
+    )
+    self.play(Write(sum_tex))
+    self.wait(0.5)
+    
+    # Sub-scene 4
+    self.play(
+        leg_group.animate.move_to(square_c.get_center()).scale(0.5),
+        Transform(sum_tex, c_sq.copy().move_to(sum_tex)),
+        run_time=2
+    )
+    self.play(Flash(square_c))
+    ```
+
+5. **Code Structure**:
+    ```python
+    class VisualizingTheorem(Scene):
+        def construct(self):
+            # Object creation
+            triangle = Polygon(...)
+            # ... (all object definitions)
+            
+            # Positioning
+            triangle.move_to(...)
+            # ... (all positioning logic)
+            
+            # Animation sequence
+            # ... (sub-scene blocks with waits)
+            
+            # Final safety checks via debug methods
+            if debug:
+                self.add(ScreenRectangle().set_color(RED))  # Safe area visualization
+    ```
+
+***Mandatory Safety Checks***:
+    - All objects verified with `debug=True` scene rendering
+    - Text scale factors applied where needed: `a_sq.scale(0.8)` if overflow detected
+    - Final positions confirmed with `np.linalg.norm(obj.get_center()) < 3.5`
+</SCENE_TECHNICAL_IMPLEMENTATION_PLAN>

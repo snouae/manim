@@ -1,0 +1,36 @@
+<SCENE_OUTLINE>
+    <SCENE_1>
+    Scene Title: Right-Angled Triangle Basics
+    Scene Purpose: Introduce right-angled triangles, define legs/hypotenuse, and establish foundational terminology. Serves as the starting point for all subsequent scenes.
+    Scene Description: A right-angled triangle is displayed with sides labeled "a," "b" (legs), and "c" (hypotenuse). Arrows and text clarify the 90° angle. A narrator explains the components.
+    Scene Layout: Triangle centered, occupying 60% of the vertical safe area. Labels "a" and "b" placed 0.3 units outside the legs; "c" 0.3 units above the hypotenuse. Angle marker (small square) at the right angle. All elements respect 0.5-unit safe margins.
+    </SCENE_1>
+
+    <SCENE_2>
+    Scene Title: Visualizing the Theorem
+    Scene Purpose: Demonstrate the relationship between side lengths and areas of squares built on them. Builds on Scene 1 by adding geometric context.
+    Scene Description: Squares extend outward from each side of the triangle. Their areas (a², b², c²) are calculated and labeled. The squares on "a" and "b" are highlighted, then merged visually into the "c" square.
+    Scene Layout: Triangle from Scene 1 remains centered. Squares attached to sides: square-a (left of leg "a"), square-b (below leg "b"), square-c (diagonal from hypotenuse). Area labels centered inside each square. Minimum 0.3-unit spacing between squares and triangle edges.
+    </SCENE_2>
+
+    <SCENE_3>
+    Scene Title: Proof by Rearrangement
+    Scene Purpose: Visually prove a² + b² = c² using geometric rearrangement. Connects Scene 2’s squares to the theorem’s logic.
+    Scene Description: The squares from legs "a" and "b" animate into pieces that fit perfectly into the hypotenuse square "c." Color-coded regions show equivalence, with a counter displaying cumulative area (a² + b² → c²).
+    Scene Layout: Original triangle fades to 50% opacity. Squares-a and -b split into four congruent right triangles and a central square. These pieces rotate/translate into square-c. Dynamic labels update during animation. All movements maintain 0.3-unit spacing between objects.
+    </SCENE_2>
+
+    <SCENE_4>
+    Scene Title: Algebraic Interpretation
+    Scene Purpose: Transition from geometric proof to symbolic equation. Links visual evidence (Scenes 2-3) to mathematical notation.
+    Scene Description: The equation a² + b² = c² appears centrally. Arrows connect each term to its corresponding square from Scene 2. A step-by-step derivation aligns the geometric and algebraic perspectives.
+    Scene Layout: Equation in large font at 40% vertical position. Squares-a, -b, -c (smaller) float below the equation. Dashed arrows link equation terms to squares. All elements maintain 0.3-unit spacing, with equation centered in the safe area.
+    </SCENE_4>
+
+    <SCENE_5>
+    Scene Title: Practical Application
+    Scene Purpose: Apply the theorem to a real-world problem. Synthesizes all prior scenes into actionable problem-solving.
+    Scene Description: A ladder leaning against a wall forms a right triangle. Known height (b = 9 units) and base (a = 12 units) are labeled. The equation solves for c (ladder length), showing c = √(9² + 12²) = 15.
+    Scene Layout: Building (rectangle) on the left, ladder as hypotenuse, ground as base. Labels "a," "b," "c" mirror Scene 1. Solution steps appear sequentially on the right side, 0.3 units away from the diagram. All text and shapes stay within safe margins.
+    </SCENE_5>
+</SCENE_OUTLINE>

@@ -1,0 +1,50 @@
+<SCENE_ANIMATION_NARRATION_PLAN>
+
+[ANIMATION_STRATEGY]
+1. **Pedagogical Animation Plan:**
+    - **Sub-scene 1: Equation Reveal (Foundational Setup)**
+        - `Write(equation)` with run_time=1.5
+        - **Rationale:** Progressive reveal prevents cognitive overload. Stroke-by-stroke writing mimics natural note-taking, helping learners mentally prepare for equation analysis.
+    - **Sub-scene 2: Square Connections (Visual-Semantic Mapping)**
+        - `FadeIn(square_group)` simultaneously (run_time=1.5)
+        - Sequential `Create(arrows)` with 0.3s delays (run_time=0.7 each)
+        - **Rationale:** Simultaneous square appearance establishes term grouping, while staggered arrow creation directs sequential attention to a²→b²→c² relationships observed in Scene 2.
+    - **Sub-scene 3: Algebraic Derivation (Conceptual Bridge)**
+        - `Circumscribe(left_side)` (run_time=2) → `Transform(left_side)` (run_time=1) → `Indicate(right_side)` (run_time=1)
+        - **Rationale:** Yellow highlight focuses attention on combined terms before transformation to c², demonstrating equation equivalence through visual metamorphosis rather than abstract substitution.
+    - **Sub-scene 4: Final Emphasis (Cognitive Anchoring)**
+        - `Create(rect)` + `Flash()` (run_time=2) with simultaneous `FadeOut(arrows,squares)` (run_time=1.5)
+        - **Rationale:** Golden border creates visual prominence while fading auxiliary elements prevents distraction from core equation.
+
+2. **Scene Flow - Pedagogical Pacing and Clarity:**
+    - **Spatial Progression:**
+        1. Central equation establishes hierarchy
+        2. Squares descend to create vertical information flow
+        3. Arrows bridge abstract/concrete representations
+        4. Derivation animates within equation space
+    - **Transition Buffers:**
+        - 0.5s after equation reveal: Allows pattern recognition
+        - 1s after arrows: Facilitates term-square mapping
+        - 2s during derivation: Gives time for mental algebra
+    - **Narration Sync:**
+        - Equation writing completes with "fundamental relationship"
+        - Arrow creation aligns with "correspond directly"
+        - Transformation coincides with "algebraic equivalence"
+
+[NARRATION]
+**Pedagogical Narration Script:**
+[00:00] "Building on the geometric proof we saw earlier, let's now translate those visual insights into mathematical language. [Equation begins writing] At the heart of this relationship lies a simple yet profound equation... [Equation completes] a² plus b² equals c²."
+
+[00:06] [0.5s pause] "Notice how each term corresponds directly to the colored squares from our geometric proof. [First arrow appears] The blue a² represents the area of this square on the shorter side... [Second arrow] The green b² captures the other leg's contribution... [Third arrow] While the red c² encompasses the hypotenuse's square."
+
+[00:12] [1s pause] "Let's make this connection explicit. [Left side circles] The combination of a² and b²... [Transformation occurs] through geometric equivalence we established, must equal... [Right side flashes] this single c² term. The equation condenses spatial truth into algebraic form."
+
+[00:18] "And there we have it - [golden border appears] this elegant equation a² + b² = c² becomes our universal tool for relating a right triangle's sides. Hold onto this formula - in our next scenes, we'll explore its powerful applications."
+
+**Narration Sync - Pedagogical Alignment:**
+- Equation writing starts at "translate those visual insights" - creates parallel between verbal metaphor and visual development
+- Arrow explanations are timed to individual arrow creations (0.3s offset for speech processing)
+- "Through geometric equivalence" coincides with transformation animation
+- "Universal tool" aligns with golden border flash for emotional emphasis
+
+</SCENE_ANIMATION_NARRATION_PLAN>

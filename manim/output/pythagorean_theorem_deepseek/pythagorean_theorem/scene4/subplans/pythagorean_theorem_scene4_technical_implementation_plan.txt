@@ -1,0 +1,95 @@
+<SCENE_TECHNICAL_IMPLEMENTATION_PLAN>
+0. **Dependencies**:
+    - **Manim API Version**: v0.18.0 (stable)
+    - **Allowed Imports**: manim, numpy (no plugins required)
+
+1. **Manim Object Selection & Configuration**:
+    - **Core Equation**: `MathTex(r"a^2 + b^2 = c^2", font_size=96)`
+    - **Squares**:
+        - `Square(side_length=1.2, color=BLUE, fill_opacity=0.2).scale(0.5)`
+        - `Square(side_length=1.2, color=GREEN, fill_opacity=0.2).scale(0.5)`
+        - `Square(side_length=1.2, color=RED, fill_opacity=0.2).scale(0.5)`
+    - **Arrows**: `DashedLine` with `add_tip()` (stroke_width=4, dash_length=0.15)
+    - **Derivation Elements**:
+        - `MathTex(r"c^2", font_size=96)`
+        - `SurroundingRectangle(color=GOLD, buff=0.2, corner_radius=0.1)`
+    - **Safety**: All objects verified via `get_left()/right()/top()/bottom()` against safe area
+
+2. **VGroup Structure**:
+    - `equation_group = VGroup(core_equation)` for transform operations
+    - `square_group = VGroup(a_sq, b_sq, c_sq)` with fixed 0.3u spacing
+    - `arrow_group = VGroup(a_arrow, b_arrow, c_arrow)` for simultaneous management
+
+3. **Spatial Positioning**:
+    - **Equation Placement**:
+        1. `core_equation.move_to(ORIGIN).shift(UP*0.4)`
+        2. Verify: `core_equation.get_top()[1] < 3.5` (screen top Y=4.0)
+    - **Square Alignment**:
+        1. `a_sq.next_to(core_equation, DOWN, buff=0.8)`
+        2. `b_sq.next_to(a_sq, RIGHT, buff=0.3)`
+        3. `c_sq.next_to(b_sq, RIGHT, buff=0.3)`
+        4. Verify: `square_group.get_bottom()[1] > -3.5` (screen bottom Y=-4.0)
+    - **Arrow Positioning**:
+        1. `a_arrow.start = core_equation[0][0].get_center() + DOWN*0.3`
+        2. `a_arrow.end = a_sq.get_top() + UP*0.3`
+        3. Apply same logic for b/c arrows with RIGHT/LEFT offsets
+
+4. **Animation Sequence**:
+    - **Sub-scene 1**:
+        ```python
+        self.play(Write(core_equation), run_time=1.5)
+        self.wait(0.5)  # Transition buffer
+        ```
+    - **Sub-scene 2**:
+        ```python
+        self.play(FadeIn(square_group))
+        # Arrow creation with staggered timing
+        for arrow, delay in zip(arrow_group, [0, 0.3, 0.6]):
+            self.play(Create(arrow), run_time=0.7, rate_func=smooth)
+            self.wait(delay)
+        ```
+    - **Sub-scene 3**:
+        ```python
+        left_terms = core_equation[0][:3]
+        self.play(Circumscribe(left_terms, fade_out=True))
+        transformed_eq = MathTex(r"c^2").move_to(left_terms)
+        self.play(Transform(left_terms, transformed_eq))
+        self.play(Indicate(core_equation[0][-2:]))
+        ```
+    - **Sub-scene 4**:
+        ```python
+        rect = SurroundingRectangle(core_equation, buff=0.2)
+        self.play(Create(rect), Flash(rect))
+        self.play(FadeOut(arrow_group), FadeOut(square_group))
+        ```
+
+5. **Code Structure**:
+    ```python
+    class PythagoreanAlgebra(Scene):
+        def construct(self):
+            # Object creation
+            equation = MathTex(r"a^2 + b^2 = c^2", font_size=96)
+            
+            # Positioning system
+            equation.shift(UP*0.4)
+            
+            # Safety check helper
+            def verify_bounds(obj):
+                assert obj.get_left()[0] > -6.5, "Left overflow"  # 8-0.5*2=7 safe area
+                assert obj.get_right()[0] < 6.5, "Right overflow"
+            
+            verify_bounds(equation)
+            
+            # Animation sequence
+            self.play(Write(equation))
+            self.wait(0.5)
+            
+            # ... rest of implementation per sub-scenes
+    ```
+
+***Mandatory Safety Checks***:
+- All objects' bounding boxes verified via `get_*()` methods against 0.5u margins
+- Spacing validated using `np.linalg.norm(a.get_center()-b.get_center())`
+- Transition buffers enforced via explicit `Wait()` calls
+- Text scaling verified: equation height < 1.5u (96pt @ 1080p)
+</SCENE_TECHNICAL_IMPLEMENTATION_PLAN>

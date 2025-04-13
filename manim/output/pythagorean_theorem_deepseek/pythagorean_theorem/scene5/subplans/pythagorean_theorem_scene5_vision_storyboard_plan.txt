@@ -1,0 +1,47 @@
+<SCENE_VISION_STORYBOARD_PLAN>
+[SCENE_VISION]
+1.  **Scene Overview**:
+    - This scene demonstrates a practical application of the Pythagorean theorem using a ladder/wall scenario. It synthesizes previous theoretical concepts into problem-solving context, showing viewers how to calculate hypotenuse length in real-world situations.
+    - **Visual learning objectives**: Create a right-angled triangle using `Polygon`, display measurement labels with `Tex`, animate equation solving using `MathTex`, and maintain spatial relationships between diagram and formulas.
+    - Manim elements will use relative positioning to maintain 0.3 unit spacing: building as `Rectangle`, ground as `Line`, ladder as `Line`, and equation steps as right-aligned `VGroup`. Color differentiation (BLUE for knowns, RED for unknown) enhances visual hierarchy.
+    - Key visual emphasis: Clear separation between diagram (left 60% of frame) and equation steps (right 40%), with animated progression from problem statement to solution using `FadeIn` sequencing.
+
+[STORYBOARD]
+1.  **Visual Flow & Pacing**:
+    - **Sub-scene 1**: Diagram Setup
+      - Visual Element: Architectural diagram (Building rectangle + ground line + ladder hypotenuse)
+      - Animation Sequence:
+        1. Create `Rectangle(height=9, width=1, color=GREY).to_corner(UL, buff=0.5)` (building)
+        2. Draw `Line(start=building.get_bottom(), end=RIGHT*12, color=GREEN).next_to(building, DOWN, aligned_edge=LEFT)` (ground)
+        3. Animate `Line(start=ground.end, end=building.get_top(), color=RED)` (ladder) with `Create` (run_time=1.5s)
+        4. FadeIn `Tex("a = 12").next_to(ground, DOWN, buff=0.3).set_color(GREEN)`
+        5. FadeIn `Tex("b = 9").next_to(building, RIGHT, buff=0.3).set_color(GREY)`
+        6. FadeIn `Tex("c = ?").next_to(ladder, UR, buff=0.3).set_color(RED)`
+        - Spacing: All labels maintain 0.3u from referenced elements, diagram stays 0.5u from scene edges
+
+    - **Sub-scene 2**: Equation Development
+      - Visual Element: Right-aligned `VGroup` of `MathTex` equations
+      - Animation Sequence:
+        1. Create `MathTex(r"c^2 = a^2 + b^2").to_edge(RIGHT, buff=1.2).shift(LEFT*0.3)` with `FadeIn` (run_time=1s)
+        2. Wait(0.5s)
+        3. Below it, create `MathTex(r"c^2 = 12^2 + 9^2").next_to(previous, DOWN, aligned_edge=LEFT, buff=0.4)` with `Write`
+        4. Wait(0.3s)
+        5. Add `MathTex(r"c^2 = 144 + 81").next_to(previous, DOWN, buff=0.4)` with `Transform`
+        6. Add `MathTex(r"c^2 = 225").next_to(previous, DOWN, buff=0.4)` with `FadeIn`
+        7. Final `MathTex(r"c = \sqrt{225} = 15").next_to(previous, DOWN, buff=0.4)` with `Circumscribe` effect
+        - Positioning: Equation group starts 1.2u from right edge, shifts left 0.3u to maintain 0.3u buffer from diagram
+
+    - **Sub-scene 3**: Solution Highlight
+      - Visual Element: Animated arrow connecting final answer to ladder
+      - Animation Sequence:
+        1. Draw `Arrow(start=equation_group.get_bottom(), end=ladder.get_center(), color=YELLOW)` with `GrowFromEdge`
+        2. Simultaneously `Circumscribe(ladder, color=YELLOW, run_time=2)`
+        3. Update `Tex("c = ?")` to `Tex("c = 15")` with color change to GREEN using `Transform`
+        - Spacing: Arrow path maintains 0.3u clearance from all other objects
+
+    - **Transition Buffers**: 
+      - 0.5s pause after diagram completion
+      - 0.3s between equation steps
+      - 1s final hold on solution highlight
+
+</SCENE_VISION_STORYBOARD_PLAN>

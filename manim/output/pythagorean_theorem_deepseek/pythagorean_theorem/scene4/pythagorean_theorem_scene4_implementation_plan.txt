@@ -1,0 +1,210 @@
+# Scene 4 Implementation Plan
+
+<SCENE_VISION_STORYBOARD_PLAN>
+[SCENE_VISION]
+1.  **Scene Overview**:
+    - This scene bridges geometric understanding (Scenes 2-3) with algebraic notation, showing how visual areas become symbolic terms in a² + b² = c². It serves as the mathematical "Rosetta Stone" connecting shape and equation.
+    - **Visual learning objectives**: Use `MathTex` for the core equation, `Square` objects with labels for term visualization, and `DashedLine` arrows for term-to-shape connections. Maintain strict alignment between geometric representations and symbolic notation.
+    - **Manim tools**: `VGroup` for equation components and square clusters, `Align` to maintain spatial relationships, and color-matched `DashedLine` arrows. All elements follow grid-based positioning using relative placement methods.
+    - **Key concepts**: Equation structure (left/right side equivalence), term correspondence to geometric areas, and algebraic transformation from geometric proof. Use color consistency (match Scene 2's square colors) to reinforce connections.
+
+[STORYBOARD]
+1.  **Visual Flow & Pacing**:
+    - **Sub-scene 1: Equation Reveal**
+        - *Visual Element*: `MathTex(r"a^2 + b^2 = c^2")` (font_size=96)
+        - *Animation Sequence*:
+            1. `Write(equation)` at 40% vertical position (`.shift(UP*0.4)`)
+            2. `Wait(0.5)` for viewer absorption
+    - **Sub-scene 2: Square Connections**
+        - *Visual Element*: Three colored squares (a²=BLUE, b²=GREEN, c²=RED) scaled to 0.5x Scene 2 size
+        - *Animation Sequence*:
+            1. Create squares as `VGroup` below equation:
+                - `a_sq.next_to(equation, DOWN, buff=0.8).set_color(BLUE)`
+                - `b_sq.next_to(a_sq, RIGHT, buff=0.3).set_color(GREEN)`
+                - `c_sq.next_to(b_sq, RIGHT, buff=0.3).set_color(RED)`
+            2. `FadeIn(squares)` simultaneously (run_time=1.5)
+            3. Add dashed arrows from equation terms to squares:
+                - `Arrow(equation[0][0], a_sq, color=BLUE, stroke_width=4, dashed=True)`
+                - `Arrow(equation[0][2], b_sq, color=GREEN, stroke_width=4, dashed=True)`
+                - `Arrow(equation[0][-1], c_sq, color=RED, stroke_width=4, dashed=True)`
+            4. `Create(arrows)` sequentially with 0.3s delays
+            5. `Wait(1)` for connection absorption
+    - **Sub-scene 3: Algebraic Derivation**
+        - *Visual Element*: Expanded `MathTex` components showing step-by-step equivalence
+        - *Animation Sequence*:
+            1. Split equation into terms using `VGroup`:
+                - `left_side = VGroup(equation[0][:3])`
+                - `right_side = equation[0][-2:]`
+            2. `Circumscribe(left_side, color=YELLOW, run_time=2)`
+            3. Transform `left_side` to `MathTex(r"c^2")` while maintaining position
+            4. Flash `right_side` with `Indicate(right_side, color=RED)`
+            5. `Wait(1)` to emphasize equivalence
+    - **Sub-scene 4: Final Emphasis**
+        - *Visual Element*: Unified equation with golden border
+        - *Animation Sequence*:
+            1. Surround equation with `SurroundingRectangle(equation, color=GOLD, buff=0.2)`
+            2. `Flash(equation_rect, run_time=2)`
+            3. `FadeOut(arrows, squares)` while keeping equation highlighted
+
+**Positioning & Spacing**:
+- All elements maintain 0.3u spacing: 
+    - Equation to top safe margin: 0.5u (`.shift(UP*0.4)` ensures bottom of equation is 0.5u from top)
+    - Squares positioned 0.8u below equation (0.3u buffer + 0.5u safe margin)
+    - Arrows start 0.3u from equation terms and end 0.3u above squares
+- Color consistency with Scene 2 ensures cognitive continuity
+
+**Transition Buffers**:
+- 0.5s pause after equation reveal
+- 1s pause after arrow connections
+- 2s total derivation sequence
+- Final flash holds for 1.5s before transition
+
+</SCENE_VISION_STORYBOARD_PLAN>
+
+<SCENE_TECHNICAL_IMPLEMENTATION_PLAN>
+0. **Dependencies**:
+    - **Manim API Version**: v0.18.0 (stable)
+    - **Allowed Imports**: manim, numpy (no plugins required)
+
+1. **Manim Object Selection & Configuration**:
+    - **Core Equation**: `MathTex(r"a^2 + b^2 = c^2", font_size=96)`
+    - **Squares**:
+        - `Square(side_length=1.2, color=BLUE, fill_opacity=0.2).scale(0.5)`
+        - `Square(side_length=1.2, color=GREEN, fill_opacity=0.2).scale(0.5)`
+        - `Square(side_length=1.2, color=RED, fill_opacity=0.2).scale(0.5)`
+    - **Arrows**: `DashedLine` with `add_tip()` (stroke_width=4, dash_length=0.15)
+    - **Derivation Elements**:
+        - `MathTex(r"c^2", font_size=96)`
+        - `SurroundingRectangle(color=GOLD, buff=0.2, corner_radius=0.1)`
+    - **Safety**: All objects verified via `get_left()/right()/top()/bottom()` against safe area
+
+2. **VGroup Structure**:
+    - `equation_group = VGroup(core_equation)` for transform operations
+    - `square_group = VGroup(a_sq, b_sq, c_sq)` with fixed 0.3u spacing
+    - `arrow_group = VGroup(a_arrow, b_arrow, c_arrow)` for simultaneous management
+
+3. **Spatial Positioning**:
+    - **Equation Placement**:
+        1. `core_equation.move_to(ORIGIN).shift(UP*0.4)`
+        2. Verify: `core_equation.get_top()[1] < 3.5` (screen top Y=4.0)
+    - **Square Alignment**:
+        1. `a_sq.next_to(core_equation, DOWN, buff=0.8)`
+        2. `b_sq.next_to(a_sq, RIGHT, buff=0.3)`
+        3. `c_sq.next_to(b_sq, RIGHT, buff=0.3)`
+        4. Verify: `square_group.get_bottom()[1] > -3.5` (screen bottom Y=-4.0)
+    - **Arrow Positioning**:
+        1. `a_arrow.start = core_equation[0][0].get_center() + DOWN*0.3`
+        2. `a_arrow.end = a_sq.get_top() + UP*0.3`
+        3. Apply same logic for b/c arrows with RIGHT/LEFT offsets
+
+4. **Animation Sequence**:
+    - **Sub-scene 1**:
+        ```python
+        self.play(Write(core_equation), run_time=1.5)
+        self.wait(0.5)  # Transition buffer
+        ```
+    - **Sub-scene 2**:
+        ```python
+        self.play(FadeIn(square_group))
+        # Arrow creation with staggered timing
+        for arrow, delay in zip(arrow_group, [0, 0.3, 0.6]):
+            self.play(Create(arrow), run_time=0.7, rate_func=smooth)
+            self.wait(delay)
+        ```
+    - **Sub-scene 3**:
+        ```python
+        left_terms = core_equation[0][:3]
+        self.play(Circumscribe(left_terms, fade_out=True))
+        transformed_eq = MathTex(r"c^2").move_to(left_terms)
+        self.play(Transform(left_terms, transformed_eq))
+        self.play(Indicate(core_equation[0][-2:]))
+        ```
+    - **Sub-scene 4**:
+        ```python
+        rect = SurroundingRectangle(core_equation, buff=0.2)
+        self.play(Create(rect), Flash(rect))
+        self.play(FadeOut(arrow_group), FadeOut(square_group))
+        ```
+
+5. **Code Structure**:
+    ```python
+    class PythagoreanAlgebra(Scene):
+        def construct(self):
+            # Object creation
+            equation = MathTex(r"a^2 + b^2 = c^2", font_size=96)
+            
+            # Positioning system
+            equation.shift(UP*0.4)
+            
+            # Safety check helper
+            def verify_bounds(obj):
+                assert obj.get_left()[0] > -6.5, "Left overflow"  # 8-0.5*2=7 safe area
+                assert obj.get_right()[0] < 6.5, "Right overflow"
+            
+            verify_bounds(equation)
+            
+            # Animation sequence
+            self.play(Write(equation))
+            self.wait(0.5)
+            
+            # ... rest of implementation per sub-scenes
+    ```
+
+***Mandatory Safety Checks***:
+- All objects' bounding boxes verified via `get_*()` methods against 0.5u margins
+- Spacing validated using `np.linalg.norm(a.get_center()-b.get_center())`
+- Transition buffers enforced via explicit `Wait()` calls
+- Text scaling verified: equation height < 1.5u (96pt @ 1080p)
+</SCENE_TECHNICAL_IMPLEMENTATION_PLAN>
+
+<SCENE_ANIMATION_NARRATION_PLAN>
+
+[ANIMATION_STRATEGY]
+1. **Pedagogical Animation Plan:**
+    - **Sub-scene 1: Equation Reveal (Foundational Setup)**
+        - `Write(equation)` with run_time=1.5
+        - **Rationale:** Progressive reveal prevents cognitive overload. Stroke-by-stroke writing mimics natural note-taking, helping learners mentally prepare for equation analysis.
+    - **Sub-scene 2: Square Connections (Visual-Semantic Mapping)**
+        - `FadeIn(square_group)` simultaneously (run_time=1.5)
+        - Sequential `Create(arrows)` with 0.3s delays (run_time=0.7 each)
+        - **Rationale:** Simultaneous square appearance establishes term grouping, while staggered arrow creation directs sequential attention to a²→b²→c² relationships observed in Scene 2.
+    - **Sub-scene 3: Algebraic Derivation (Conceptual Bridge)**
+        - `Circumscribe(left_side)` (run_time=2) → `Transform(left_side)` (run_time=1) → `Indicate(right_side)` (run_time=1)
+        - **Rationale:** Yellow highlight focuses attention on combined terms before transformation to c², demonstrating equation equivalence through visual metamorphosis rather than abstract substitution.
+    - **Sub-scene 4: Final Emphasis (Cognitive Anchoring)**
+        - `Create(rect)` + `Flash()` (run_time=2) with simultaneous `FadeOut(arrows,squares)` (run_time=1.5)
+        - **Rationale:** Golden border creates visual prominence while fading auxiliary elements prevents distraction from core equation.
+
+2. **Scene Flow - Pedagogical Pacing and Clarity:**
+    - **Spatial Progression:**
+        1. Central equation establishes hierarchy
+        2. Squares descend to create vertical information flow
+        3. Arrows bridge abstract/concrete representations
+        4. Derivation animates within equation space
+    - **Transition Buffers:**
+        - 0.5s after equation reveal: Allows pattern recognition
+        - 1s after arrows: Facilitates term-square mapping
+        - 2s during derivation: Gives time for mental algebra
+    - **Narration Sync:**
+        - Equation writing completes with "fundamental relationship"
+        - Arrow creation aligns with "correspond directly"
+        - Transformation coincides with "algebraic equivalence"
+
+[NARRATION]
+**Pedagogical Narration Script:**
+[00:00] "Building on the geometric proof we saw earlier, let's now translate those visual insights into mathematical language. [Equation begins writing] At the heart of this relationship lies a simple yet profound equation... [Equation completes] a² plus b² equals c²."
+
+[00:06] [0.5s pause] "Notice how each term corresponds directly to the colored squares from our geometric proof. [First arrow appears] The blue a² represents the area of this square on the shorter side... [Second arrow] The green b² captures the other leg's contribution... [Third arrow] While the red c² encompasses the hypotenuse's square."
+
+[00:12] [1s pause] "Let's make this connection explicit. [Left side circles] The combination of a² and b²... [Transformation occurs] through geometric equivalence we established, must equal... [Right side flashes] this single c² term. The equation condenses spatial truth into algebraic form."
+
+[00:18] "And there we have it - [golden border appears] this elegant equation a² + b² = c² becomes our universal tool for relating a right triangle's sides. Hold onto this formula - in our next scenes, we'll explore its powerful applications."
+
+**Narration Sync - Pedagogical Alignment:**
+- Equation writing starts at "translate those visual insights" - creates parallel between verbal metaphor and visual development
+- Arrow explanations are timed to individual arrow creations (0.3s offset for speech processing)
+- "Through geometric equivalence" coincides with transformation animation
+- "Universal tool" aligns with golden border flash for emotional emphasis
+
+</SCENE_ANIMATION_NARRATION_PLAN>
+
